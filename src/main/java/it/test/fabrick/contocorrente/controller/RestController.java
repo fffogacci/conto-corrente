@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -17,9 +18,10 @@ import java.util.Map;
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
 
+    final String ACCOUNT_ID = "14537780";
     @GetMapping("/getLetturaSaldo")
     public String letturaSaldo() {
-        String uri = "https://sandbox.platfr.io/api/gbs/banking/v4.0/accounts/14537780/balance";
+        String uri = "https://sandbox.platfr.io/api/gbs/banking/v4.0/accounts/" + ACCOUNT_ID + "/balance";
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -37,7 +39,7 @@ public class RestController {
 
     @GetMapping("/getLetturaTransazioni")
     public String letturaTransazioni() {
-        String uri = "https://sandbox.platfr.io/api/gbs/banking/v4.0/accounts/14537780/transactions";
+        String uri = "https://sandbox.platfr.io/api/gbs/banking/v4.0/accounts/" + ACCOUNT_ID + "/transactions";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Api-key", "FXOVVXXHVCPVPBZXIJOBGUGSKHDNFRRQJP");
@@ -55,6 +57,11 @@ public class RestController {
         JSONObject jsonObject = new JSONObject(res.getBody());
         return jsonObject.get("payload").toString();
 
+    }
+
+    @PostMapping("/postBonifico")
+    public String bonifico(){
+        return null;
     }
 
 }
