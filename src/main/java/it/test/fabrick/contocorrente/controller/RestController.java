@@ -1,6 +1,7 @@
 package it.test.fabrick.contocorrente.controller;
 
 
+import it.test.fabrick.contocorrente.model.Bonifico;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -33,8 +34,6 @@ public class RestController {
         JSONObject jsonObject = new JSONObject(res.getBody());
         JSONObject payload = new JSONObject(jsonObject.get("payload").toString());
         return payload.get("balance").toString();
-
-
     }
 
     @GetMapping("/getLetturaTransazioni")
@@ -59,9 +58,20 @@ public class RestController {
 
     }
 
-    @PostMapping("/postBonifico")
+    @GetMapping("/getBonifico")
     public String bonifico(){
-        return null;
-    }
+        String uri = "https://sandbox.platfr.io/api/gbs/banking/v4.0/accounts/" + ACCOUNT_ID + "/payments/money-transfers";
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Api-key", "FXOVVXXHVCPVPBZXIJOBGUGSKHDNFRRQJP");
+        headers.set("Auth-Schema", "S2S");
+        headers.set("X-Time-Zone", "");
 
+        Bonifico bonifico = new Bonifico(14537780L, "francesca", "bonifico", "euro", "123.5", "2021-11-02");
+
+        HttpEntity<Bonifico> entity = new HttpEntity<Bonifico>(bonifico, headers);
+        ResponseEntity<String> res = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
+
+        return  res.getBody();
+    }
 }
